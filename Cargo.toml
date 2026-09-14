@@ -1,0 +1,3 @@
+[workspace]
+resolver = "2"
+members = ["crates/tn3270", "crates/wopr-core", "crates/wopr-server"]
