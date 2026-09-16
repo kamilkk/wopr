@@ -7,3 +7,4 @@ pub mod logon;
 pub mod tso;
 pub mod dataset;
 mod jes;
+mod audit;
