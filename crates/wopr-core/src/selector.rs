@@ -20,16 +20,16 @@ impl Environment for Selector {
 
 #[cfg(test)]
 mod tests {
-    use super::*;   // brings in Selector, Environment, Reply, SessionCtx, System
+    use super::*;   // brings in Selector, Env, LogonState, Reply, SessionCtx, System
     #[test]
     fn selector_routes() {
         let (mut sys, mut ctx, mut sel) = (System::default(), SessionCtx::default(), Selector);
-        // known applids are accepted (each becomes a real Switch in its own phase):
-        match sel.on_line("L TSO", &mut sys, &mut ctx) {
-            Reply::Text(t) => assert!(t.contains("SELECTED")),
-            _ => panic!("expected acceptance"),
-        }
-        // unknown applids are rejected in character:
+        // L TSO now SWITCHES into the logon panel (it returned plain text in Phase 1):
+        assert!(matches!(
+            sel.on_line("L TSO", &mut sys, &mut ctx),
+            Reply::Switch(Env::TsoLogon(_))
+        ));
+        // unknown applids are still rejected in character:
         match sel.on_line("L IMS", &mut sys, &mut ctx) {
             Reply::Text(t) => assert!(t.contains("DFS3649E")),
             _ => panic!("expected rejection"),
