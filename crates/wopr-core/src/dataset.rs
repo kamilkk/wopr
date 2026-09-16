@@ -1,4 +1,4 @@
-use crate::system::System;   // listds/listcat/catalog_cmd take &System
+use crate::system::System;
 
 #[derive(Debug)] pub enum DsOrg { Ps, Po }        // sequential vs partitioned
 #[derive(Debug)] pub enum RecFm { F, Fb, V, Vb, U }
@@ -35,6 +35,25 @@ impl Catalog {
             dsorg: DsOrg::Ps,
             dcb: Dcb { recfm: RecFm::Fb, lrecl: 80, blksize: 800 },
             content: DsContent::Seq(vec![CUST_GOLDEN.to_vec()]),
+        });
+
+        // NEW in Phase 5: a JCL library (PDS) with one member, so SUBMIT has input.
+        // (The `\` line-continuations strip the source indentation, so each parsed
+        // line begins at `//`.)
+        let jcl = "\
+            //RUNIT    JOB (ACCT),'DEMO',CLASS=A,MSGCLASS=X\n\
+            //STEP1    EXEC PGM=IEBGENER\n\
+            //SYSUT1   DD DSN=IBMUSER.CUST.DATA,DISP=SHR\n\
+            //SYSUT2   DD SYSOUT=*\n\
+            //SYSIN    DD DUMMY\n";
+        let recs: Vec<Vec<u8>> = jcl.lines().map(|l| l.as_bytes().to_vec()).collect();
+        let mut mem = std::collections::BTreeMap::new();
+        mem.insert("RUNIT".to_string(), recs);
+        c.sets.insert("IBMUSER.JCL".into(), DataSet {
+            name: "IBMUSER.JCL".into(),
+            dsorg: DsOrg::Po,
+            dcb: Dcb { recfm: RecFm::Fb, lrecl: 80, blksize: 800 },
+            content: DsContent::Pds(mem),
         });
         c
     }
