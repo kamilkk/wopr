@@ -117,7 +117,11 @@ pub fn submit(args: &str, sys: &mut System) -> String {
     let rc = run_job(&job, sys);
     let line = format!("JOB{:05} {:<8} {:<8} RC={:04}\r\n", job.id, job.name, "IBMUSER", rc);
     let sysout = vec![("JESMSGLG".to_string(), line.clone())];
+    let jobname = job.name.clone();
     sys.spool.jobs.push(SpoolEntry { job, rc, sysout });
+    sys.audit.record(crate::audit::SmfEvent::now(
+        crate::audit::EventKind::JobSubmit, "IBMUSER",
+        serde_json::json!({"job": jobname, "rc": rc})));
     line
 }
 
