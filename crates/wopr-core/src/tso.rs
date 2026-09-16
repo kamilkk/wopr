@@ -19,8 +19,9 @@ impl Environment for Tso {
             // Uncomment each arm as its phase lands — they reference not-yet-existing
             // code (and need a `use`), so they stay commented until then:
             // "SECEVENTS" => Reply::Text(sys.audit.render_recent(20)),                 // Phase 6
-            // "SUBMIT"    => crate::jes::submit(args, sys, _ctx),                       // Phase 5
-            "LISTCAT" | "LISTDS" => Reply::Text(crate::dataset::catalog_cmd(verb, args, sys)), 
+            "SUBMIT"       => Reply::Text(crate::jes::submit(args, sys)),
+            "ST" | "SDSF"  => Reply::Text(crate::jes::sdsf_st(sys)),
+            "LISTCAT" | "LISTDS" => Reply::Text(crate::dataset::catalog_cmd(verb, args, sys)),
             // "OMVS"      => Reply::Switch(crate::session::Env::Omvs(crate::omvs::Omvs::new(&self.user))), // Phase 11
             "LOGOFF"   => Reply::Disconnect,
             other      => Reply::Text(format!("IKJ56500I COMMAND {other} NOT FOUND\r\n")),
