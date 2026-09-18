@@ -33,12 +33,16 @@ fn listuser(args: &str, caller: &User, sys: &System) -> String {
     let target = args.split_whitespace().next().unwrap_or(&caller.userid).to_ascii_uppercase();
     let Some(u) = sys.racf.users.get(&target) else {
         return format!("IKJ56712I INVALID USERID, {target}\r\n");
-    };
+    };  
+    let mut list: Vec<&str> = Vec::new();
+    if u.attrs.special { list.push("SPECIAL"); }
+    if u.attrs.operations { list.push("OPERATIONS"); }
+    if u.attrs.auditor { list.push("AUDITOR"); }
+    let attr = if list.is_empty() { "NONE".to_string() } else { list.join(" ") };
     format!(
         "USER={id}  NAME=UNKNOWN  OWNER=SYS1  CREATED=00.000\r\n\
-         ATTRIBUTES={attr}\r\n DEFAULT-GROUP={dg}\r\n",
+        ATTRIBUTES={attr}\r\n DEFAULT-GROUP={dg}\r\n",
         id = u.userid, dg = u.default_group,
-        attr = if u.attrs.special { "SPECIAL" } else { "NONE" },
     )
 }
 

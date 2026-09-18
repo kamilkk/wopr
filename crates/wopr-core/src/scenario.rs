@@ -5,7 +5,7 @@
 use crate::system::System;
 use serde::Deserialize;
 
-#[derive(Deserialize, Clone, Copy, PartialEq)]
+#[derive(Deserialize, Clone, Copy, PartialEq, Debug)]  // Debug: for the ?mode startup log in main.rs
 #[serde(rename_all = "lowercase")]
 pub enum Mode { Secure, Training }
 
