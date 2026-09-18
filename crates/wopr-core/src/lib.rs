@@ -8,3 +8,4 @@ pub mod tso;
 pub mod dataset;
 mod jes;
 mod audit;
+pub mod scenario;

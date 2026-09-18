@@ -1,0 +1,9 @@
+mode = "training"
+hostname = "WOPR"
+[[users]]
+userid = "GUEST"
+password = "GUEST"
+attributes = []
+[weaknesses]
+default_creds_present = true
+guest_over_privileged = true
