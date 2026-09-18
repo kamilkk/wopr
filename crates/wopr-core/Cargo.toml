@@ -8,3 +8,5 @@ anyhow = "1.0.104"
 chrono = "0.4.45"
 serde_json = "1.0.151"
 tracing = "0.1.44"
+serde = { version = "1", features = ["derive"] }
+toml = "0.8"
