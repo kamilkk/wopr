@@ -10,3 +10,5 @@ mod jes;
 mod audit;
 pub mod scenario;
 mod cics;
+pub mod db2;
+pub mod drda;

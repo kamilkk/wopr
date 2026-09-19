@@ -2,6 +2,7 @@ use crate::logon::LogonState;
 use crate::session::{Env, Environment, Reply, SessionCtx};
 use crate::system::System;
 use crate::cics::Cics;
+use crate::db2::Db2;
 
 pub struct Selector;
 impl Environment for Selector {
@@ -13,6 +14,7 @@ impl Environment for Selector {
                 "TSO" => Reply::Switch(Env::TsoLogon(LogonState::default())),
                 "DB2" => Reply::Text(format!("{app} SELECTED (environment builds in a later phase)\r\n")),
                 "CICS" => Reply::Switch(Env::Cics(Cics::new())),
+                "DB2" => Reply::Switch(Env::Db2(Db2::new())),
                 other=> Reply::Text(format!("DFS3649E APPLICATION {other} NOT ACTIVE\r\n")),
             },
             _ => Reply::Text("ENTER 'L TSO', 'L CICS' OR 'L DB2'\r\n".into()),
