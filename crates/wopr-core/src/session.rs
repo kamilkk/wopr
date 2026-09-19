@@ -7,7 +7,7 @@ pub enum Env {
     Tso(crate::tso::Tso),
     Cics(crate::cics::Cics),
     Db2(crate::db2::Db2),
-    // Omvs (P11) still to come
+    Omvs(crate::omvs::Omvs),
 }
 
 pub enum Reply {
@@ -42,6 +42,7 @@ pub fn env_on_line(env: &mut Env, line: &str, sys: &mut System, ctx: &mut Sessio
         Env::Tso(e)      => e.on_line(line, sys, ctx),
         Env::Cics(e)     => e.on_line(line, sys, ctx),
         Env::Db2(e)      => e.on_line(line, sys, ctx),
+        Env::Omvs(e)     => e.on_line(line, sys, ctx),
     }
 }
 
@@ -52,9 +53,10 @@ pub fn env_prompt(env: &Env) -> &'static str {
         Env::Tso(e)      => e.prompt(),
         Env::Cics(e)     => e.prompt(),
         Env::Db2(e)      => e.prompt(),
+        Env::Omvs(e)     => e.prompt(),
     }
 }
 
 pub fn env_banner(env: &Env) -> &'static str {
-    match env { Env::Selector(_) | Env::TsoLogon(_) | Env::Tso(_) | Env::Cics(_) | Env::Db2(_) => "" }
+    match env { Env::Selector(_) | Env::TsoLogon(_) | Env::Tso(_) | Env::Cics(_) | Env::Db2(_) | Env::Omvs(_) => "" }
 }
