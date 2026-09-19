@@ -11,4 +11,9 @@ impl Screen {
             Field { row: 3, col: 14, protected: false, hidden: true,  text: String::new() },
         ], cursor: (2, 14) }
     }
+
+    /// True if any field's text contains `needle`.
+    pub fn contains_text(&self, needle: &str) -> bool {
+        self.fields.iter().any(|f| f.text.contains(needle))
+    }
 }

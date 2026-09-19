@@ -1,4 +1,4 @@
 pub mod telnet;
 mod stream;
-mod screen;
+pub mod screen;
 mod ebcdic;

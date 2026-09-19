@@ -723,6 +723,7 @@ dependencies = [
  "chrono",
  "serde",
  "serde_json",
+ "tn3270",
  "toml",
  "tracing",
 ]
