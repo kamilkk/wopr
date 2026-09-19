@@ -3,9 +3,10 @@ use crate::system::System;
 
 pub enum Env {
     Selector(crate::selector::Selector),
-    TsoLogon(crate::logon::LogonState),   // new this phase
-    Tso(crate::tso::Tso),                 // new this phase (stub below; full in Phase 3)
-    // Cics (P9), Db2 (P10), Omvs (P11) still to come
+    TsoLogon(crate::logon::LogonState),
+    Tso(crate::tso::Tso),
+    Cics(crate::cics::Cics),
+    // Db2 (P10), Omvs (P11) still to come
 }
 
 pub enum Reply {
@@ -38,15 +39,19 @@ pub fn env_on_line(env: &mut Env, line: &str, sys: &mut System, ctx: &mut Sessio
         Env::Selector(e) => e.on_line(line, sys, ctx),
         Env::TsoLogon(e) => e.on_line(line, sys, ctx),
         Env::Tso(e)      => e.on_line(line, sys, ctx),
+        Env::Cics(e)     => e.on_line(line, sys, ctx),   // new
     }
 }
+
 pub fn env_prompt(env: &Env) -> &'static str {
     match env {
         Env::Selector(e) => e.prompt(),
         Env::TsoLogon(e) => e.prompt(),
         Env::Tso(e)      => e.prompt(),
+        Env::Cics(e)     => e.prompt(),                  // new
     }
 }
+
 pub fn env_banner(env: &Env) -> &'static str {
-    match env { Env::Selector(_) | Env::TsoLogon(_) | Env::Tso(_) => "" }
+    match env { Env::Selector(_) | Env::TsoLogon(_) | Env::Tso(_) | Env::Cics(_) => "" }
 }

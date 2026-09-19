@@ -9,3 +9,4 @@ pub mod dataset;
 mod jes;
 mod audit;
 pub mod scenario;
+mod cics;
