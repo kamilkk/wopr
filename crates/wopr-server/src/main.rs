@@ -54,6 +54,23 @@ async fn main() -> anyhow::Result<()> {
 
     let listener = tokio::net::TcpListener::bind("0.0.0.0:2023").await?;
     tracing::info!("selector listening on 2023");
+    let drda = tokio::net::TcpListener::bind("0.0.0.0:50000").await?;
+    tracing::info!("DRDA listener on 50000");
+    tokio::spawn(async move {
+        loop {
+            if let Ok((mut sock, _)) = drda.accept().await {
+                tokio::spawn(async move {
+                    use tokio::io::{AsyncReadExt, AsyncWriteExt};
+                    let mut buf = [0u8; 1024];
+                    if let Ok(n) = sock.read(&mut buf).await {
+                        if let Some(reply) = wopr_core::drda::handle_drda(&buf[..n]) {
+                            let _ = sock.write_all(&reply).await;
+                        }
+                    }
+                });
+            }
+        }
+    });
     let sys = Arc::new(Mutex::new(sys));
     loop {
         let (sock, peer) = listener.accept().await?;
