@@ -738,6 +738,16 @@ dependencies = [
  "tracing",
  "tracing-subscriber",
  "wopr-core",
+ "wopr-web",
+]
+
+[[package]]
+name = "wopr-web"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "serde_json",
+ "tokio",
 ]
 
 [[package]]
