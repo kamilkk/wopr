@@ -738,6 +738,7 @@ dependencies = [
  "tracing",
  "tracing-subscriber",
  "wopr-core",
+ "wopr-web",
 ]
 
 [[package]]
